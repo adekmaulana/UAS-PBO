@@ -16,8 +16,8 @@ import javax.swing.JLabel;
  */
 public class Main extends javax.swing.JFrame {
     
-    private final HashMap<Integer, String> data_peminjam;
-    private String buku = "PILIH BUKU";
+    private final HashMap<Integer, String[]> data_peminjam;
+    private String buku = null;
     
     private void createDialog(String title, String content) {
         JDialog d;
@@ -363,16 +363,18 @@ public class Main extends javax.swing.JFrame {
         String nama = jTextField1.getText();
         Integer nim = Integer.parseInt(jTextField2.getText());
         
+        String[] data = {nama, buku};
+        
         if (data_peminjam.get(nim) != null) {
             createDialog("Anda Sudah Meminjam", "Kembalikan sebelum meminjam");
             return;
         }
         
-        if (buku.equalsIgnoreCase("PILIH BUKU")) {
+        if (buku == null || buku.equalsIgnoreCase("PILIH BUKU")) {
             createDialog("Warning", "Pilih buku yang anda ingin pinjam");
             return;
         }
-        data_peminjam.put(nim, buku);
+        data_peminjam.put(nim, data);
         createDialog("Terima Kasih!", "%s, sudah meminjam".formatted(nama));
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -391,14 +393,15 @@ public class Main extends javax.swing.JFrame {
             return;
         }
         
-        if (buku.equalsIgnoreCase("PILIH BUKU")) {
+        if (buku == null || buku.equalsIgnoreCase("PILIH BUKU")) {
             createDialog("Warning", "Pilih buku yang anda ingin kembalikan");
             return;
         }
 
-        if (data_peminjam.get(nim).equals(buku)) {
+        if (data_peminjam.get(nim)[1].equals(buku)) {
         } else {
-            createDialog(buku, "Buku yang anda pinjam adalah: '%s'".formatted(data_peminjam.get(nim)));
+            createDialog(buku, "Buku yang anda pinjam adalah: '%s'".formatted(
+                    data_peminjam.get(nim)[1]));
             return;
         }
         createDialog("Terima Kasih!", "%s, sudah mengembalikan".formatted(nama));
@@ -440,7 +443,7 @@ public class Main extends javax.swing.JFrame {
                 return;
             }
             
-            if (buku.equals("PILIH BUKU")){
+            if (buku == null || buku.equals("PILIH BUKU")){
                 createDialog("Pilih buku", "Sebelum tekan enter pilih buku");
                 return;
             }

@@ -15,7 +15,7 @@ import javax.swing.JLabel;
  */
 public class Data extends javax.swing.JFrame {
     
-    private HashMap<Integer, String> data;
+    private HashMap<Integer, String[]> data;
     
     private void createDialog(String title, String content) {
         JDialog d;
@@ -45,12 +45,10 @@ public class Data extends javax.swing.JFrame {
         initComponents();
     }
     
-    public Data(HashMap<Integer, String> data) {
+    public Data(HashMap<Integer, String[]> data) {
         initComponents();
         
         this.data = data;
-        jTextField2.setEnabled(false);
-        jButton1.setEnabled(false);
     }
     
     /**
@@ -62,8 +60,6 @@ public class Data extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -74,22 +70,6 @@ public class Data extends javax.swing.JFrame {
                 formWindowActivated(evt);
             }
         });
-
-        jTextField1.setFont(new java.awt.Font("CodeNewRoman Nerd Font", 0, 11)); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField1KeyPressed(evt);
-            }
-        });
-
-        jLabel1.setFont(new java.awt.Font("CodeNewRoman Nerd Font", 0, 11)); // NOI18N
-        jLabel1.setLabelFor(jTextField1);
-        jLabel1.setText("NAMA");
 
         jLabel2.setFont(new java.awt.Font("CodeNewRoman Nerd Font", 0, 11)); // NOI18N
         jLabel2.setLabelFor(jTextField2);
@@ -122,39 +102,26 @@ public class Data extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))))
+                        .addGap(96, 96, 96)
+                        .addComponent(jLabel2))
+                    .addComponent(jTextField2))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addComponent(jLabel2)
+                .addGap(8, 8, 8)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
@@ -165,32 +132,28 @@ public class Data extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowActivated
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        if ("".equals(jTextField1.getText()) || "".equals(jTextField2.getText())
-                ) {
-            createDialog("Warning", "Isi NIM dan Nama anda");
+
+        if ("".equals(jTextField2.getText())) {
+            createDialog("Warning", "Isi NIM");
             return;
         }
 
-        String nama = jTextField1.getText();
-        Integer nim = Integer.parseInt(jTextField2.getText());
-        if (data.get(nim) == null) {
-            createDialog(nama, "Anda belum meminjam buku");
+        Integer nim;
+        try {
+            nim = Integer.parseInt(jTextField2.getText());
+        }
+        catch(NumberFormatException e) {
+            createDialog("Error", "Kolom hanya support Angka!");
+            return;
+        }
+
+        String[] d = data.get(nim);
+        if (d == null) {
+            createDialog("Hmmmm", "Anda belum meminjam buku");
         } else {
-            createDialog(nama, "Buku yang anda pinjam: '%s'".formatted(data.get(nim)));
+            createDialog(d[0], "Buku yang anda pinjam: '%s'".formatted(d[1]));
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
-        if (evt.getKeyCode() == 10) {
-            String nama = jTextField1.getText();
-            if ("".equals(nama)){
-                createDialog("Masukkan Nama", "Input nama sebelum tekan enter");
-                return;
-            }
-            jTextField2.setEnabled(true);
-        }
-    }//GEN-LAST:event_jTextField1KeyPressed
 
     private void jTextField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyPressed
         if (evt.getKeyCode() == 10) {
@@ -199,7 +162,7 @@ public class Data extends javax.swing.JFrame {
                 createDialog("Masukkan NIM", "Input nim sebelum tekan enter");
                 return;
             }
-            jButton1.setEnabled(true);
+            jButton1.doClick();
         }
     }//GEN-LAST:event_jTextField2KeyPressed
 
@@ -238,9 +201,7 @@ public class Data extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
